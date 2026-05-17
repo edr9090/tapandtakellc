@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tap & Take LLC — New York Vending</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:#3dba47; --green-dark:#276b2e; --green-light:#7ee08a;
+  --black:#0a0a0a; --dark:#111111; --dark2:#181818; --dark3:#222222;
+  --mid:#333333; --muted:#666666; --light:#cccccc; --white:#f5f5f5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Barlow',sans-serif;overflow-x:hidden;}
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(10,10,10,0.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid #1c1c1c;
+  padding:0 40px;height:70px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:0;cursor:pointer;}
+/* Inline SVG logo in nav */
+.nav-logo svg{height:46px;width:auto;}
+.nav-links{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-links li a{
+  padding:8px 14px;border-radius:6px;
+  font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color .2s,background .2s;cursor:pointer;
+}
+.nav-links li a:hover,.nav-links li a.active{color:var(--white);background:var(--dark3);}
+.nav-cta{background:var(--green)!important;color:#000!important;padding:9px 20px!important;border-radius:6px!important;}
+.nav-cta:hover{background:var(--green-light)!important;}
+/* ── HERO ── */
+.hero{
+  min-height:100vh;padding:70px 0 0;
+  display:flex;flex-direction:column;position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 50%,#1a3a1a20 0%,transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%,#3dba4706 0%,transparent 60%),
+    linear-gradient(160deg,#0a0a0a 0%,#0d1a0d 50%,#0a0a0a 100%);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(61,186,71,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(61,186,71,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.hero-content{
+  position:relative;z-index:2;flex:1;
+  display:flex;align-items:center;padding:80px 80px 60px;gap:60px;
+}
+.hero-left{flex:1;max-width:640px;}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(61,186,71,.1);border:1px solid rgba(61,186,71,.25);
+  border-radius:100px;padding:6px 16px 6px 10px;margin-bottom:28px;
+}
+.hero-eyebrow-dot{width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
+.hero-eyebrow span{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--green);text-transform:uppercase;}
+.hero-h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(52px,7vw,90px);line-height:.95;letter-spacing:2px;margin-bottom:24px;
+}
+.hero-h1 em{color:var(--green);font-style:normal;}
+.hero-sub{font-size:18px;font-weight:300;color:#888;line-height:1.7;margin-bottom:40px;max-width:520px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px;}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 32px;border-radius:6px;
+  font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;border:none;transition:all .2s;
+}
+.btn-green{background:var(--green);color:#000;}
+.btn-green:hover{background:var(--green-light);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--white);border:1px solid var(--mid);}
+.btn-outline:hover{border-color:var(--green);color:var(--green);}
+.hero-trust{display:flex;gap:28px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+.trust-item::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;}
+/* Hero right — A-1 logo large */
+.hero-right{flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+/* ── STRIP ── */
+.strip{
+  background:var(--green);padding:16px 80px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.strip-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#000;}
+.strip-divider{width:1px;height:20px;background:rgba(0,0,0,.2);}
+/* ── SECTIONS ── */
+.section{padding:100px 80px;}
+.section-alt{background:var(--dark);}
+.section-darker{background:#0d0d0d;}
+.sec-eyebrow{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:14px;}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,58px);letter-spacing:2px;line-height:1;margin-bottom:16px;}
+.sec-title span{color:var(--green);}
+.sec-sub{font-size:16px;font-weight:300;color:#888;line-height:1.7;max-width:520px;margin-bottom:60px;}
+/* ── HOW IT WORKS ── */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--dark3);border-radius:14px;overflow:hidden;margin-bottom:60px;}
+.step{background:var(--dark2);padding:40px 32px;position:relative;}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:64px;color:rgba(61,186,71,.12);line-height:1;position:absolute;top:16px;right:24px;}
+.step-icon{font-size:32px;margin-bottom:16px;}
+.step-title{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;margin-bottom:12px;}
+.step-body{font-size:14px;color:#777;line-height:1.7;}
+/* ── CARDS ── */
+.card-grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+.info-card{background:var(--dark2);border:1px solid var(--dark3);border-radius:12px;padding:28px;transition:border-color .25s,transform .25s;}
+.info-card:hover{border-color:rgba(61,186,71,.3);transform:translateY(-3px);}
+.info-card-icon{width:48px;height:48px;background:rgba(61,186,71,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px;}
+.info-card-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:10px;}
+.info-card-body{font-size:14px;color:#777;line-height:1.7;}
+/* ── CASHLESS BADGE ── */
+.cashless-banner{
+  background:linear-gradient(135deg,#1a1a1a,#111);
+  border:1px solid var(--dark3);border-radius:14px;padding:36px 40px;
+  display:flex;align-items:center;gap:32px;margin-bottom:60px;
+}
+.cashless-icon{font-size:48px;flex-shrink:0;}
+.cashless-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px;}
+.cashless-body{font-size:14px;color:#888;line-height:1.7;}
+.cashless-tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.cashless-tag{
+  background:rgba(61,186,71,.1);border:1px solid rgba(61,186,71,.25);
+  border-radius:100px;padding:5px 14px;
+  font-size:11px;font-weight:700;letter-spacing:2px;color:var(--green);text-transform:uppercase;
+}
+/* ── TEAM ── */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;}
+.team-card{background:var(--dark2);border:1px solid var(--dark3);border-radius:14px;overflow:hidden;}
+.team-photo{height:200px;background:linear-gradient(135deg,#1a3a1a,#0d1a0d);display:flex;align-items:center;justify-content:center;position:relative;}
+.team-initials{font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--green);opacity:.5;letter-spacing:4px;}
+.team-photo-label{position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.7);border:1px solid #333;border-radius:6px;padding:4px 10px;font-size:10px;color:#666;letter-spacing:2px;}
+.team-info{padding:24px;}
+.team-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin-bottom:4px;}
+.team-role{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:14px;}
+.team-bio{font-size:14px;color:#777;line-height:1.7;}
+/* ── VALUES ── */
+.values-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--dark3);border-radius:12px;overflow:hidden;}
+.value-item{background:var(--dark2);padding:36px 28px;text-align:center;}
+.value-icon{font-size:32px;margin-bottom:14px;}
+.value-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:8px;}
+.value-body{font-size:13px;color:#666;line-height:1.6;}
+/* ── FAQ ── */
+.faq-list{max-width:760px;}
+.faq-item{border-bottom:1px solid var(--dark3);}
+.faq-q{padding:22px 0;font-size:16px;font-weight:600;color:var(--white);cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;user-select:none;}
+.faq-q:hover{color:var(--green);}
+.faq-toggle{width:24px;height:24px;border:1px solid var(--dark3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--green);flex-shrink:0;transition:transform .25s;margin-top:2px;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;font-size:14px;color:#777;line-height:1.8;}
+.faq-a.open{max-height:300px;padding-bottom:22px;}
+.faq-item.open .faq-toggle{transform:rotate(45deg);}
+.faq-item.open .faq-q{color:var(--green);}
+/* ── CONTACT ── */
+.contact-grid{display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:start;}
+.contact-form{background:var(--dark2);border:1px solid var(--dark3);border-radius:14px;padding:40px;}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;background:var(--dark3);border:1px solid #2a2a2a;border-radius:8px;
+  padding:12px 16px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--white);
+  outline:none;transition:border-color .2s;-webkit-appearance:none;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green);}
+.form-group select option{background:var(--dark2);}
+.form-group textarea{resize:vertical;min-height:100px;}
+.form-submit{
+  width:100%;padding:16px;background:var(--green);color:#000;
+  border:none;border-radius:8px;font-family:'Barlow',sans-serif;
+  font-size:14px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  cursor:pointer;transition:background .2s,transform .2s;margin-top:8px;
+}
+.form-submit:hover{background:var(--green-light);transform:translateY(-1px);}
+.contact-info-panel{}
+.contact-block{background:var(--dark2);border:1px solid var(--dark3);border-radius:12px;padding:28px;margin-bottom:20px;}
+.contact-block-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;letter-spacing:1px;margin-bottom:16px;color:var(--green);}
+.contact-line{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:#bbb;margin-bottom:12px;line-height:1.5;}
+.contact-line-icon{font-size:18px;width:20px;text-align:center;flex-shrink:0;}
+/* ── GALLERY ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px;}
+.gallery-item{
+  border-radius:12px;overflow:hidden;border:1px solid var(--dark3);
+  position:relative;aspect-ratio:4/3;background:var(--dark2);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;
+  cursor:pointer;transition:border-color .2s,transform .2s;
+}
+.gallery-item:hover{border-color:var(--green);transform:scale(1.02);}
+.gallery-item.featured{grid-column:span 2;aspect-ratio:16/9;}
+.gallery-placeholder-icon{font-size:40px;opacity:.3;}
+.gallery-placeholder-text{font-size:12px;color:var(--muted);letter-spacing:2px;}
+.gallery-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.7) 0%,transparent 60%);opacity:0;transition:opacity .2s;display:flex;align-items:flex-end;padding:16px;}
+.gallery-item:hover .gallery-overlay{opacity:1;}
+.gallery-label{font-size:13px;font-weight:600;letter-spacing:1px;}
+/* ── CTA BANNER ── */
+.cta-banner{
+  background:linear-gradient(135deg,#1a3a1a,#0d200d);
+  border:1px solid rgba(61,186,71,.2);border-radius:16px;
+  padding:60px;text-align:center;position:relative;overflow:hidden;
+}
+.cta-banner::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:400px;height:200px;background:radial-gradient(ellipse,rgba(61,186,71,.15) 0%,transparent 70%);pointer-events:none;}
+.cta-banner-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:3px;margin-bottom:16px;}
+.cta-banner-sub{font-size:16px;color:#888;max-width:480px;margin:0 auto 36px;line-height:1.6;font-weight:300;}
+.cta-banner-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+/* ── FOOTER ── */
+footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
+.footer-top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid #1a1a1a;}
+.footer-brand-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;margin-bottom:8px;}
+.footer-brand-name span{color:var(--green);}
+.footer-tagline{font-size:13px;color:#555;line-height:1.6;margin-bottom:20px;max-width:240px;}
+.footer-col-title{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.footer-link{display:block;font-size:14px;color:#555;text-decoration:none;margin-bottom:10px;cursor:pointer;transition:color .2s;}
+.footer-link:hover{color:var(--green);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#333;letter-spacing:1px;}
+.footer-green{color:var(--green);}
+/* ── FORM SUCCESS ── */
+.form-success{display:none;text-align:center;padding:40px 20px;}
+.form-success.show{display:block;}
+.form-success-icon{font-size:48px;margin-bottom:16px;}
+.form-success-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--green);margin-bottom:8px;}
+.form-success-body{font-size:14px;color:#777;line-height:1.7;}
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav{padding:0 20px;}
+  .nav-links{display:none;}
+  .hero-content{flex-direction:column;padding:40px 24px;}
+  .hero-right{display:none;}
+  .section{padding:60px 24px;}
+  .strip{padding:16px 24px;flex-direction:column;align-items:flex-start;}
+  .strip-divider{display:none;}
+  .steps{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+  .gallery-grid{grid-template-columns:1fr 1fr;}
+  .gallery-item.featured{grid-column:span 2;}
+  .values-strip{grid-template-columns:1fr;}
+  .cta-banner{padding:40px 24px;}
+  footer{padding:40px 24px 24px;}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center;}
+  .cashless-banner{flex-direction:column;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')" style="cursor:pointer;">
+    <!-- A-1 Logo inline SVG -->
+    <svg viewBox="0 0 270 175" xmlns="http://www.w3.org/2000/svg" height="52">
+      <defs>
+        <linearGradient id="navGreen" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" style="stop-color:#66bb6a"/>
+          <stop offset="100%" style="stop-color:#1b5e20"/>
+        </linearGradient>
+        <filter id="navDrop">
+          <feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="#000" flood-opacity="0.4"/>
+        </filter>
+      </defs>
+      <ellipse cx="152" cy="92" rx="112" ry="68" fill="none" stroke="#ccc" stroke-width="10"/>
+      <ellipse cx="152" cy="92" rx="112" ry="68" fill="none" stroke="#1a1a1a" stroke-width="8"/>
+      <ellipse cx="152" cy="92" rx="108" ry="64" fill="none" stroke="#2e7d32" stroke-width="4"/>
+      <ellipse cx="152" cy="92" rx="104" ry="60" fill="none" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <rect x="16" y="28" width="64" height="108" rx="7" fill="url(#navGreen)" filter="url(#navDrop)" opacity=".15"/>
+      <rect x="16" y="28" width="64" height="108" rx="7" fill="#232323" filter="url(#navDrop)"/>
+      <rect x="22" y="36" width="52" height="32" rx="3" fill="#2e7d32" opacity=".85"/>
+      <rect x="22" y="34" width="52" height="3" rx="1" fill="#4CAF50"/>
+      <rect x="22" y="74" width="13" height="9" rx="2" fill="#43A047"/>
+      <rect x="37" y="74" width="13" height="9" rx="2" fill="#2e7d32"/>
+      <rect x="52" y="74" width="13" height="9" rx="2" fill="#43A047"/>
+      <rect x="22" y="86" width="13" height="9" rx="2" fill="#2e7d32"/>
+      <rect x="37" y="86" width="13" height="9" rx="2" fill="#43A047"/>
+      <rect x="52" y="86" width="13" height="9" rx="2" fill="#2e7d32"/>
+      <rect x="34" y="100" width="28" height="24" rx="3" fill="#1a1a1a"/>
+      <circle cx="41" cy="107" r="2.5" fill="#4CAF50"/>
+      <circle cx="50" cy="107" r="2.5" fill="#4CAF50"/>
+      <circle cx="41" cy="116" r="2.5" fill="#4CAF50"/>
+      <circle cx="50" cy="116" r="2.5" fill="#81C784"/>
+      <rect x="18" y="126" width="60" height="7" rx="2" fill="#262626"/>
+      <circle cx="72" cy="52" r="15" fill="#2e7d32" filter="url(#navDrop)"/>
+      <circle cx="72" cy="52" r="12" fill="#388E3C"/>
+      <path d="M65 47 Q72 41 79 47" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M67 50 Q72 46 77 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="72" cy="53" r="2" fill="white"/>
+      <text x="100" y="75" font-family="'Black Ops One',Impact,sans-serif" font-size="42" fill="url(#navGreen)" filter="url(#navDrop)" letter-spacing="2">TAP</text>
+      <text x="190" y="68" font-family="'Black Ops One',sans-serif" font-size="24" fill="#1a1a1a" opacity=".7">&amp;</text>
+      <text x="100" y="117" font-family="'Black Ops One',Impact,sans-serif" font-size="42" fill="url(#navGreen)" filter="url(#navDrop)" letter-spacing="1">TAKE</text>
+      <text x="102" y="134" font-family="Verdana,sans-serif" font-size="10" font-weight="700" fill="#aaa" letter-spacing="6">LLC</text>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('services')" id="nav-services">Services</a></li>
+    <li><a onclick="showPage('about')" id="nav-about">About</a></li>
+    <li><a onclick="showPage('gallery')" id="nav-gallery">Locations</a></li>
+    <li><a onclick="showPage('faq')" id="nav-faq">FAQ</a></li>
+    <li><a onclick="showPage('contact')" id="nav-contact" class="nav-cta">Get a Machine</a></li>
+  </ul>
+</nav>
+<!-- ══════════════════════════════════════
+     HOME
+══════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <div class="hero-eyebrow-dot"></div>
+          <span>Now Accepting New Locations — NY, NJ &amp; CT</span>
+        </div>
+        <h1 class="hero-h1">Your Location.<br><em>Our Machine.</em><br>Zero Cost to You.</h1>
+        <p class="hero-sub">Tap & Take installs fully stocked, cashless vending machines at New York businesses — at absolutely no cost to you. We handle everything. Your people just tap and go.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-green" onclick="showPage('contact')">Get a Free Machine →</button>
+          <button class="btn btn-outline" onclick="showPage('services')">How It Works</button>
+        </div>
+        <div class="hero-trust">
+          <div class="trust-item">NY Licensed LLC</div>
+          <div class="trust-item">Long Island, NY</div>
+          <div class="trust-item">Cashless Only</div>
+          <div class="trust-item">Zero Setup Cost</div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <!-- Large A-1 logo as hero graphic -->
+        <svg viewBox="0 0 270 175" xmlns="http://www.w3.org/2000/svg" width="340" style="filter:drop-shadow(0 20px 60px rgba(61,186,71,0.15))">
+          <defs>
+            <linearGradient id="heroG" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#66bb6a"/>
+              <stop offset="100%" style="stop-color:#1b5e20"/>
+            </linearGradient>
+            <filter id="heroDrop">
+              <feDropShadow dx="3" dy="4" stdDeviation="5" flood-color="#000" flood-opacity="0.5"/>
+            </filter>
+            <filter id="heroGlow">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <ellipse cx="152" cy="92" rx="112" ry="68" fill="none" stroke="#333" stroke-width="12"/>
+          <ellipse cx="152" cy="92" rx="112" ry="68" fill="none" stroke="#1a1a1a" stroke-width="9"/>
+          <ellipse cx="152" cy="92" rx="108" ry="64" fill="none" stroke="#2e7d32" stroke-width="4" filter="url(#heroGlow)"/>
+          <ellipse cx="152" cy="92" rx="104" ry="60" fill="none" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <rect x="16" y="28" width="64" height="108" rx="7" fill="#1e1e1e" filter="url(#heroDrop)"/>
+          <rect x="22" y="36" width="52" height="32" rx="3" fill="#2e7d32" opacity=".9"/>
+          <rect x="22" y="34" width="52" height="3" rx="1" fill="#4CAF50" filter="url(#heroGlow)"/>
+          <rect x="22" y="74" width="13" height="9" rx="2" fill="#43A047"/>
+          <rect x="37" y="74" width="13" height="9" rx="2" fill="#2e7d32"/>
+          <rect x="52" y="74" width="13" height="9" rx="2" fill="#43A047"/>
+          <rect x="22" y="86" width="13" height="9" rx="2" fill="#2e7d32"/>
+          <rect x="37" y="86" width="13" height="9" rx="2" fill="#43A047"/>
+          <rect x="52" y="86" width="13" height="9" rx="2" fill="#2e7d32"/>
+          <rect x="34" y="100" width="28" height="24" rx="3" fill="#111"/>
+          <circle cx="41" cy="107" r="2.5" fill="#4CAF50"/>
+          <circle cx="50" cy="107" r="2.5" fill="#4CAF50"/>
+          <circle cx="41" cy="116" r="2.5" fill="#4CAF50"/>
+          <circle cx="50" cy="116" r="2.5" fill="#81C784"/>
+          <rect x="18" y="126" width="60" height="7" rx="2" fill="#1a1a1a"/>
+          <circle cx="72" cy="52" r="15" fill="#2e7d32" filter="url(#heroDrop)"/>
+          <circle cx="72" cy="52" r="12" fill="#388E3C"/>
+          <path d="M65 47 Q72 41 79 47" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M67 50 Q72 46 77 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="72" cy="53" r="2" fill="white"/>
+          <text x="100" y="75" font-family="'Black Ops One',Impact,sans-serif" font-size="42" fill="url(#heroG)" filter="url(#heroDrop)" letter-spacing="2">TAP</text>
+          <text x="190" y="68" font-family="'Black Ops One',sans-serif" font-size="24" fill="#555">&amp;</text>
+          <text x="100" y="117" font-family="'Black Ops One',Impact,sans-serif" font-size="42" fill="url(#heroG)" filter="url(#heroDrop)" letter-spacing="1">TAKE</text>
+          <text x="102" y="134" font-family="Verdana,sans-serif" font-size="10" font-weight="700" fill="#666" letter-spacing="6">LLC</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <!-- Trust strip -->
+  <div class="strip">
+    <div class="strip-item">🏢 Offices</div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">🛒 Retail Stores</div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">🏭 Warehouses</div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">🏋️ Gyms</div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">🏫 Schools</div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">🏢 Multi-Location Businesses</div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">🗺️ CT — Coming Soon</div>
+  </div>
+  <!-- How it works -->
+  <div class="section section-alt">
+    <div class="sec-eyebrow">How It Works</div>
+    <div class="sec-title">Simple. <span>Hands-Free. Free.</span></div>
+    <div class="sec-sub">From your first call to a fully running machine — the whole process is built around zero hassle for you.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">📞</div>
+        <div class="step-title">Reach Out</div>
+        <div class="step-body">Tell us about your location. We respond within 24 hours and schedule a free, no-commitment site visit to assess your space.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">📋</div>
+        <div class="step-title">We Assess & Install</div>
+        <div class="step-body">We visit, determine the best machine placement, and handle installation completely. Machine is up and running within days — no work on your end.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">✅</div>
+        <div class="step-title">We Handle Everything After</div>
+        <div class="step-body">Restocking, maintenance, repairs, software monitoring — all us. Your only job is to enjoy having a fully stocked machine in your space.</div>
+      </div>
+    </div>
+    <!-- Cashless banner -->
+    <div class="cashless-banner">
+      <div class="cashless-icon">📲</div>
+      <div>
+        <div class="cashless-title">100% Cashless — Fast, Modern, Secure</div>
+        <div class="cashless-body">Every Tap & Take machine is cashless-only. No coin jams, no cash handling, no security concerns. Your employees and customers pay instantly with the cards and devices they already carry.</div>
+        <div class="cashless-tags">
+          <div class="cashless-tag">Apple Pay</div>
+          <div class="cashless-tag">Google Pay</div>
+          <div class="cashless-tag">Credit Card</div>
+          <div class="cashless-tag">Debit Card</div>
+          <div class="cashless-tag">Contactless Tap</div>
+        </div>
+      </div>
+    </div>
+    <!-- Value cards -->
+    <div class="card-grid-3">
+      <div class="info-card"><div class="info-card-icon">🔧</div><div class="info-card-title">Full Maintenance</div><div class="info-card-body">Every repair, every fix — completely on us. If it breaks, we show up. You never touch it.</div></div>
+      <div class="info-card"><div class="info-card-icon">📦</div><div class="info-card-title">We Restock It</div><div class="info-card-body">We monitor inventory remotely and restock on schedule. Your machine stays full — always.</div></div>
+      <div class="info-card"><div class="info-card-icon">📊</div><div class="info-card-title">Live Monitoring</div><div class="info-card-body">Smart inventory tracking. We monitor every sale and stock level in real time.</div></div>
+      <div class="info-card"><div class="info-card-icon">💰</div><div class="info-card-title">Zero Cost to You</div><div class="info-card-body">No machine purchase. No installation fee. No maintenance costs. Ever. You provide the space — we cover everything else.</div></div>
+      <div class="info-card"><div class="info-card-icon">📍</div><div class="info-card-title">Local & Responsive</div><div class="info-card-body">Long Island–based owners. When you call, you talk to a decision maker — not a national call center.</div></div>
+      <div class="info-card"><div class="info-card-icon">🎯</div><div class="info-card-title">Custom Product Mix</div><div class="info-card-body">We curate snacks and drinks for your specific location and your people's preferences.</div></div>
+    </div>
+  </div>
+  <!-- CTA -->
+  <div class="section section-darker">
+    <div class="cta-banner">
+      <div class="cta-banner-title">Add a Vending Machine<br>to Your Location — Free</div>
+      <p class="cta-banner-sub">No cost. No hassle. Just a fully stocked, modern cashless machine your team will actually use.</p>
+      <div class="cta-banner-ctas">
+        <button class="btn btn-green" onclick="showPage('contact')">Get a Free Machine →</button>
+        <button class="btn btn-outline" onclick="showPage('faq')">Read FAQs First</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand-name">TAP <span>&</span> TAKE LLC</div><div class="footer-tagline">Long Island, NY's local vending operator. We install, stock, and maintain — completely free to your location.</div><div style="font-size:12px;color:#333;letter-spacing:1px;">Long Island, NY &nbsp;|&nbsp; Serving NY &amp; NJ &nbsp;·&nbsp; <span style="color:#4CAF50;font-size:11px;">CT Coming Soon</span></div></div>
+      <div><div class="footer-col-title">Navigate</div><a class="footer-link" onclick="showPage('home')">Home</a><a class="footer-link" onclick="showPage('services')">Services</a><a class="footer-link" onclick="showPage('about')">About Us</a><a class="footer-link" onclick="showPage('gallery')">Locations</a></div>
+      <div><div class="footer-col-title">Company</div><a class="footer-link" onclick="showPage('faq')">FAQ</a><a class="footer-link" onclick="showPage('contact')">Contact</a><a class="footer-link" onclick="showPage('contact')">Get a Machine</a></div>
+      <div><div class="footer-col-title">Contact</div><div class="footer-link">Long Island, NY</div><div class="footer-link">info@tapandtakellc.com</div><div class="footer-link">NY · NJ · CT <span style="font-size:10px;color:#4CAF50;letter-spacing:1px;">(CT Coming Soon)</span></div></div>
+    </div>
+    <div class="footer-bottom"><div>© 2025 Tap & Take LLC. All rights reserved. New York LLC.</div><div class="footer-green">Long Island, New York</div></div>
+  </footer>
+</div>
+<!-- ══════════════════════════════════════
+     SERVICES
+══════════════════════════════════════ -->
+<div class="page" id="page-services">
+  <div style="height:70px"></div>
+  <div class="section">
+    <div class="sec-eyebrow">Our Service</div>
+    <div class="sec-title">One Simple Offer.<br><span>Zero Catch.</span></div>
+    <div class="sec-sub">We place a fully stocked, cashless vending machine at your location — at no cost to you. We own it, we run it, we maintain it. All you do is let us in the door.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:60px;">
+      <div class="info-card" style="border-color:rgba(61,186,71,.3);">
+        <div class="info-card-icon">🏗️</div>
+        <div class="info-card-title">We Buy the Machine</div>
+        <div class="info-card-body">Every machine is purchased and owned by Tap & Take. Your business has zero capital outlay — before, during, or after installation.</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(61,186,71,.3);">
+        <div class="info-card-icon">🔌</div>
+        <div class="info-card-title">We Install It</div>
+        <div class="info-card-body">We handle delivery, placement, and full setup. In and done — minimal disruption to your space. All we need is a standard electrical outlet.</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(61,186,71,.3);">
+        <div class="info-card-icon">📦</div>
+        <div class="info-card-title">We Stock It, Always</div>
+        <div class="info-card-body">Real-time inventory monitoring means we restock before your machine ever runs low. You'll never see an empty machine.</div>
+      </div>
+      <div class="info-card" style="border-color:rgba(61,186,71,.3);">
+        <div class="info-card-icon">🔧</div>
+        <div class="info-card-title">We Fix Everything</div>
+        <div class="info-card-body">100% of repair and maintenance costs are on us — always. Something breaks, we handle it. You don't make a call, you don't lift a finger.</div>
+      </div>
+    </div>
+    <div class="cashless-banner">
+      <div class="cashless-icon">📲</div>
+      <div>
+        <div class="cashless-title">Cashless-Only Machines — Modern by Design</div>
+        <div class="cashless-body">We made a deliberate choice to operate cashless-only machines. No coin mechanisms to jam, no cash to collect or secure, no maintenance headaches around currency handling. Every transaction is instant, digital, and tracked. Your people tap their card or phone and walk away in seconds.</div>
+        <div class="cashless-tags">
+          <div class="cashless-tag">Apple Pay</div>
+          <div class="cashless-tag">Google Pay</div>
+          <div class="cashless-tag">Visa / Mastercard</div>
+          <div class="cashless-tag">Amex</div>
+          <div class="cashless-tag">Contactless Tap</div>
+          <div class="cashless-tag">Chip & PIN</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section section-alt">
+    <div class="sec-eyebrow">Who We Serve</div>
+    <div class="sec-title">Great Locations<br><span>We Partner With</span></div>
+    <div class="sec-sub">We work best with locations that have consistent foot traffic. Here's where our machines perform best.</div>
+    <div class="card-grid-3">
+      <div class="info-card"><div class="info-card-icon">🏢</div><div class="info-card-title">Offices & Corporate</div><div class="info-card-body">Break rooms, employee lounges, and lobbies — keep your team fueled without a cafeteria.</div></div>
+      <div class="info-card"><div class="info-card-icon">🛒</div><div class="info-card-title">Retail Stores</div><div class="info-card-body">Employees on shift, customers browsing — a cashless machine fits naturally in any retail environment.</div></div>
+      <div class="info-card"><div class="info-card-icon">🏭</div><div class="info-card-title">Warehouses & Distribution</div><div class="info-card-body">Shift workers need quick, easy access to food and drinks around their schedules — we deliver exactly that.</div></div>
+      <div class="info-card"><div class="info-card-icon">🏋️</div><div class="info-card-title">Gyms & Fitness Centers</div><div class="info-card-body">Sports drinks, protein bars, water — stocked specifically for your clientele's needs.</div></div>
+      <div class="info-card"><div class="info-card-icon">🏫</div><div class="info-card-title">Schools & Campuses</div><div class="info-card-body">Faculty lounges, administrative areas, and student spaces — cashless and always stocked.</div></div>
+      <div class="info-card"><div class="info-card-icon">🏘️</div><div class="info-card-title">Multi-Location Businesses</div><div class="info-card-body">We coordinate vending across multiple sites under one single agreement — one call, one team, consistent service everywhere.</div></div>
+    </div>
+  </div>
+  <div class="section section-darker">
+    <div class="cta-banner">
+      <div class="cta-banner-title">Let's Get a Machine<br>Into Your Space</div>
+      <p class="cta-banner-sub">Free assessment, free installation, free everything. We just need your space and a standard outlet.</p>
+      <div class="cta-banner-ctas">
+        <button class="btn btn-green" onclick="showPage('contact')">Request a Free Assessment →</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand-name">TAP <span>&</span> TAKE LLC</div><div class="footer-tagline">Long Island, NY's local vending operator.</div></div>
+      <div><div class="footer-col-title">Navigate</div><a class="footer-link" onclick="showPage('home')">Home</a><a class="footer-link" onclick="showPage('services')">Services</a><a class="footer-link" onclick="showPage('about')">About</a></div>
+      <div><div class="footer-col-title">Company</div><a class="footer-link" onclick="showPage('faq')">FAQ</a><a class="footer-link" onclick="showPage('contact')">Contact</a></div>
+      <div><div class="footer-col-title">Contact</div><div class="footer-link">Long Island, NY</div><div class="footer-link">info@tapandtakellc.com</div></div>
+    </div>
+    <div class="footer-bottom"><div>© 2025 Tap & Take LLC. All rights reserved.</div><div class="footer-green">Long Island, New York</div></div>
+  </footer>
+</div>
+<!-- ══════════════════════════════════════
+     ABOUT
+══════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div style="height:70px"></div>
+  <div class="section">
+    <div class="sec-eyebrow">Our Story</div>
+    <div class="sec-title">Local Operators Who<br><span>Actually Show Up</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:80px;">
+      <div>
+        <p style="font-size:16px;color:#999;line-height:1.8;margin-bottom:20px;font-weight:300;">Tap & Take LLC was founded by two Long Island–based entrepreneurs who believed local businesses deserved better — modern, cashless vending machines that are always stocked, always working, and always managed by people who actually pick up the phone.</p>
+        <p style="font-size:16px;color:#999;line-height:1.8;margin-bottom:20px;font-weight:300;">We built Tap & Take on a simple premise: your location shouldn't have to deal with the headaches of running a vending machine. That's our job. You just provide the space.</p>
+        <p style="font-size:16px;color:#999;line-height:1.8;font-weight:300;">We're not a national corporation. We're your neighbors. When you call us, you talk to an owner. When something needs fixing, we show up. That's the Tap & Take difference.</p>
+      </div>
+      <div style="background:var(--dark2);border:1px solid var(--dark3);border-radius:14px;padding:36px;">
+        <div style="font-size:11px;letter-spacing:3px;color:var(--green);font-weight:700;margin-bottom:20px;">BY THE NUMBERS</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="text-align:center;padding:20px;background:var(--dark3);border-radius:10px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--green);line-height:1;">NY LLC</div><div style="font-size:10px;color:#666;letter-spacing:2px;margin-top:4px;">REGISTERED</div></div>
+          <div style="text-align:center;padding:20px;background:var(--dark3);border-radius:10px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--green);line-height:1;">50/50</div><div style="font-size:10px;color:#666;letter-spacing:2px;margin-top:4px;">OWNERSHIP</div></div>
+          <div style="text-align:center;padding:20px;background:var(--dark3);border-radius:10px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--green);line-height:1;">3</div><div style="font-size:10px;color:#666;letter-spacing:2px;margin-top:4px;">STATES SERVED</div></div>
+          <div style="text-align:center;padding:20px;background:var(--dark3);border-radius:10px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:40px;color:var(--green);line-height:1;">$0</div><div style="font-size:10px;color:#666;letter-spacing:2px;margin-top:4px;">COST TO YOU</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-eyebrow">Meet the Owners</div>
+    <div class="sec-title">The People Behind<br><span>Every Machine</span></div>
+    <div class="sec-sub">When you partner with Tap & Take, you work directly with the owners — not a sales team, not a call center.</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo"><div class="team-initials">ER</div><div class="team-photo-label">ADD PHOTO</div></div>
+        <div class="team-info">
+          <div class="team-name">Edward Ringel</div>
+          <div class="team-role">CFO &amp; Co-CEO — Finance &amp; Systems</div>
+          <div class="team-bio">Edward manages the financial backbone and operational systems of Tap & Take — from backend accounting and underwriting to the software infrastructure that keeps every machine running and every dollar tracked. If it runs under the hood, it runs through Edward.</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><div class="team-initials">YR</div><div class="team-photo-label">ADD PHOTO</div></div>
+        <div class="team-info">
+          <div class="team-name">Yonah Rohinsky</div>
+          <div class="team-role">COO — Installations &amp; Operations</div>
+          <div class="team-bio">Yonah runs the ground operation — machine placement, installation, restocking, and field maintenance. He's the reason machines are always full and always working. Every location that partners with Tap & Take has Yonah personally overseeing their setup and ongoing service.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section section-alt">
+    <div class="sec-eyebrow">What We Stand For</div>
+    <div class="sec-title">Our <span>Values</span></div>
+    <div class="values-strip">
+      <div class="value-item"><div class="value-icon">🤝</div><div class="value-title">Reliability</div><div class="value-body">Machines are stocked. Repairs get done. Calls get answered. Every time, no exceptions.</div></div>
+      <div class="value-item"><div class="value-icon">🔎</div><div class="value-title">Transparency</div><div class="value-body">No hidden fees. No surprise clauses. You always know exactly how your partnership works.</div></div>
+      <div class="value-item"><div class="value-icon">📍</div><div class="value-title">Local Ownership</div><div class="value-body">Long Island–based and invested in this community. Your success keeps us accountable.</div></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand-name">TAP <span>&</span> TAKE LLC</div><div class="footer-tagline">Long Island, NY's local vending operator.</div></div>
+      <div><div class="footer-col-title">Navigate</div><a class="footer-link" onclick="showPage('home')">Home</a><a class="footer-link" onclick="showPage('services')">Services</a><a class="footer-link" onclick="showPage('about')">About</a></div>
+      <div><div class="footer-col-title">Company</div><a class="footer-link" onclick="showPage('faq')">FAQ</a><a class="footer-link" onclick="showPage('contact')">Contact</a></div>
+      <div><div class="footer-col-title">Contact</div><div class="footer-link">Long Island, NY</div><div class="footer-link">info@tapandtakellc.com</div></div>
+    </div>
+    <div class="footer-bottom"><div>© 2025 Tap & Take LLC. All rights reserved.</div><div class="footer-green">Long Island, New York</div></div>
+  </footer>
+</div>
+<!-- ══════════════════════════════════════
+     GALLERY
+══════════════════════════════════════ -->
+<div class="page" id="page-gallery">
+  <div style="height:70px"></div>
+  <div class="section">
+    <div class="sec-eyebrow">Our Locations</div>
+    <div class="sec-title">Machines in the Field.<br><span>Now Expanding.</span></div>
+    <div class="sec-sub">We're growing our network across New York and New Jersey <span style="color:#4CAF50;font-style:normal;">(Connecticut coming soon)</span> — placing modern cashless machines in workplaces that want better for their people.</div>
+    <div class="gallery-grid">
+      <div class="gallery-item featured"><div class="gallery-placeholder-icon">🏢</div><div class="gallery-placeholder-text">PHOTO COMING SOON</div><div class="gallery-overlay"><div class="gallery-label">Commercial Office — Tap & Take Partner</div></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder-icon">🏭</div><div class="gallery-placeholder-text">PHOTO COMING SOON</div><div class="gallery-overlay"><div class="gallery-label">Distribution Center</div></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder-icon">🛒</div><div class="gallery-placeholder-text">PHOTO COMING SOON</div><div class="gallery-overlay"><div class="gallery-label">Retail Location</div></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder-icon">🏋️</div><div class="gallery-placeholder-text">PHOTO COMING SOON</div><div class="gallery-overlay"><div class="gallery-label">Fitness Center</div></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder-icon">🏫</div><div class="gallery-placeholder-text">PHOTO COMING SOON</div><div class="gallery-overlay"><div class="gallery-label">School / Campus</div></div></div>
+    </div>
+    <div style="background:rgba(61,186,71,0.06);border:1px solid rgba(61,186,71,0.2);border-radius:12px;padding:28px 32px;margin-bottom:40px;text-align:center;">
+      <div style="font-size:32px;margin-bottom:12px;">📸</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:#4CAF50;margin-bottom:8px;">Photos Coming Soon</div>
+      <div style="font-size:14px;color:#666;line-height:1.7;max-width:480px;margin:0 auto;">We're out in the field getting our machines placed. Real location photos are on the way — check back soon.</div>
+    </div>
+    <div class="sec-eyebrow">What We Stock</div>
+    <div class="sec-title">Curated for <span>Your People</span></div>
+    <div class="sec-sub">Every machine's product lineup is tailored to the location — what works in a gym is different from what works in a warehouse.</div>
+    <div class="card-grid-3">
+      <div class="info-card"><div class="info-card-icon">🥤</div><div class="info-card-title">Beverages</div><div class="info-card-body">Water, sports drinks, sodas, energy drinks — always cold, always stocked.</div></div>
+      <div class="info-card"><div class="info-card-icon">🍿</div><div class="info-card-title">Snacks</div><div class="info-card-body">Chips, pretzels, popcorn, and crowd favorites — curated for your team.</div></div>
+      <div class="info-card"><div class="info-card-icon">🥜</div><div class="info-card-title">Healthy Options</div><div class="info-card-body">Trail mix, protein bars, nuts — better-for-you options for health-conscious spaces.</div></div>
+      <div class="info-card"><div class="info-card-icon">🍫</div><div class="info-card-title">Candy &amp; Treats</div><div class="info-card-body">Chocolate, gummies, granola bars — the break-room staples people actually want.</div></div>
+      <div class="info-card"><div class="info-card-icon">💧</div><div class="info-card-title">Hydration</div><div class="info-card-body">Still water, sparkling water, electrolyte drinks — keep your people hydrated all day.</div></div>
+      <div class="info-card"><div class="info-card-icon">🎯</div><div class="info-card-title">Custom Mix</div><div class="info-card-body">Have specific requests? We'll build the product lineup around your team's actual preferences.</div></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand-name">TAP <span>&</span> TAKE LLC</div><div class="footer-tagline">Long Island, NY's local vending operator.</div></div>
+      <div><div class="footer-col-title">Navigate</div><a class="footer-link" onclick="showPage('home')">Home</a><a class="footer-link" onclick="showPage('services')">Services</a><a class="footer-link" onclick="showPage('about')">About</a></div>
+      <div><div class="footer-col-title">Company</div><a class="footer-link" onclick="showPage('faq')">FAQ</a><a class="footer-link" onclick="showPage('contact')">Contact</a></div>
+      <div><div class="footer-col-title">Contact</div><div class="footer-link">Long Island, NY</div><div class="footer-link">info@tapandtakellc.com</div></div>
+    </div>
+    <div class="footer-bottom"><div>© 2025 Tap & Take LLC. All rights reserved.</div><div class="footer-green">Long Island, New York</div></div>
+  </footer>
+</div>
+<!-- ══════════════════════════════════════
+     FAQ
+══════════════════════════════════════ -->
+<div class="page" id="page-faq">
+  <div style="height:70px"></div>
+  <div class="section">
+    <div class="sec-eyebrow">FAQ</div>
+    <div class="sec-title">Straight Answers.<br><span>No Fluff.</span></div>
+    <div class="sec-sub">Everything you need to know before reaching out. Still have a question? We'll answer it directly.</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is there any cost to my business? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">None. Zero. We buy the machine, install it, stock it, and maintain it — entirely at our expense. Your business never pays a single dollar, before, during, or after.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Why are your machines cashless only? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">Cashless machines are cleaner, faster, and more reliable. No coin jams, no bill validators to repair, no cash to collect or secure. Every transaction is instant and tracked digitally. Your people pay with the cards and phones they already carry — it's a better experience all around.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Who restocks the machine? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">We do — completely. Our machines are monitored in real time through our inventory platform. We track stock remotely and restock on schedule before machines ever run low. You'll never need to make a call or touch the machine.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What if the machine breaks? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">We fix it — fast. All maintenance and repair costs are 100% on us, always. As Long Island–based owners, we respond personally. You're not waiting on hold with a national help desk. You contact us and we show up.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What products will the machine carry? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">We customize the product mix for your specific location and your people's preferences. A gym gets sports drinks and protein bars. A warehouse break room gets a broader variety. An office gets snacks and drinks the team actually wants. We discuss this during the assessment and adjust based on what sells.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What size space do I need? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">Standard vending machines are approximately 35" wide × 30" deep × 72" tall. You need a small footprint and access to a standard electrical outlet. If you're unsure whether your space works, that's exactly what our free assessment is for.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How long are contracts? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">We keep things fair and straightforward — no long-term traps or fine print designed to work against you. We'll walk you through every term before anything is signed. We earn your continued partnership through service, not contracts that lock you in.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Do you work with multi-location businesses? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">Absolutely — multi-location partnerships are one of our specialties. We assess, install, and manage machines across multiple sites under a single coordinated agreement. If you operate more than one location and want a consistent vending solution across all of them, reach out and let's talk.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How do I get started? <div class="faq-toggle">+</div></div>
+        <div class="faq-a">Fill out the form on our Contact page, call us, or email us directly. We respond within 24 hours to schedule a free site assessment. Zero commitment — we'll just come take a look, tell you what we'd recommend, and let you decide.</div>
+      </div>
+    </div>
+    <div style="margin-top:60px;">
+      <div class="cta-banner">
+        <div class="cta-banner-title">Still Have a Question?</div>
+        <p class="cta-banner-sub">We'd rather answer it directly than leave you guessing. Reach out — we actually pick up.</p>
+        <div class="cta-banner-ctas"><button class="btn btn-green" onclick="showPage('contact')">Contact Us →</button></div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand-name">TAP <span>&</span> TAKE LLC</div><div class="footer-tagline">Long Island, NY's local vending operator.</div></div>
+      <div><div class="footer-col-title">Navigate</div><a class="footer-link" onclick="showPage('home')">Home</a><a class="footer-link" onclick="showPage('services')">Services</a><a class="footer-link" onclick="showPage('about')">About</a></div>
+      <div><div class="footer-col-title">Company</div><a class="footer-link" onclick="showPage('faq')">FAQ</a><a class="footer-link" onclick="showPage('contact')">Contact</a></div>
+      <div><div class="footer-col-title">Contact</div><div class="footer-link">Long Island, NY</div><div class="footer-link">info@tapandtakellc.com</div></div>
+    </div>
+    <div class="footer-bottom"><div>© 2025 Tap & Take LLC. All rights reserved.</div><div class="footer-green">Long Island, New York</div></div>
+  </footer>
+</div>
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div style="height:70px"></div>
+  <div class="section">
+    <div class="sec-eyebrow">Get Started</div>
+    <div class="sec-title">Ready to Add a Machine<br><span>to Your Location?</span></div>
+    <div class="sec-sub">Fill out the form and we'll respond within 24 hours to schedule a free, no-commitment site assessment.</div>
+    <div class="contact-grid">
+      <div class="contact-form" id="contactFormWrap">
+        <div class="form-title">Tell Us About Your Location</div>
+        <div id="formContent">
+          <div class="form-row">
+            <div class="form-group"><label>Business Name</label><input type="text" placeholder="Company Name"></div>
+            <div class="form-group"><label>Your Name</label><input type="text" placeholder="Jane Smith"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Your Role / Title</label><input type="text" placeholder="Facilities Manager"></div>
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="jane@company.com"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Location Type</label>
+              <select>
+                <option value="">Select your space...</option>
+                <option>Office / Corporate</option>
+                <option>Retail Store</option>
+                <option>Warehouse / Distribution</option>
+                <option>Gym / Fitness Center</option>
+                <option>School / Campus</option>
+                <option>Commercial Property</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Number of Locations</label>
+              <select>
+                <option value="">How many sites?</option>
+                <option>1 Location</option>
+                <option>2–5 Locations</option>
+                <option>6–20 Locations</option>
+                <option>20+ Locations</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label>Tell Us About Your Space</label><textarea placeholder="Approximate size, daily foot traffic, any specific needs or questions..."></textarea></div>
+          <button class="form-submit" onclick="submitForm()">Request Free Assessment →</button>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <div class="form-success-icon">✅</div>
+          <div class="form-success-title">We Got It — Thank You!</div>
+          <div class="form-success-body">We'll be in touch within 24 hours to schedule your free site assessment. Talk soon.</div>
+        </div>
+      </div>
+      <div class="contact-info-panel">
+        <div class="contact-block">
+          <div class="contact-block-title">What Happens Next</div>
+          <div class="contact-line"><div class="contact-line-icon">1️⃣</div>We review your submission and respond within 24 hours</div>
+          <div class="contact-line"><div class="contact-line-icon">2️⃣</div>We schedule a free, no-commitment site visit</div>
+          <div class="contact-line"><div class="contact-line-icon">3️⃣</div>We assess your space and walk you through everything</div>
+          <div class="contact-line"><div class="contact-line-icon">4️⃣</div>You decide — no pressure, no obligation</div>
+        </div>
+        <div class="contact-block">
+          <div class="contact-block-title">Reach Us Directly</div>
+          <div class="contact-line"><div class="contact-line-icon">📧</div>info@tapandtakellc.com</div>
+          <div class="contact-line"><div class="contact-line-icon">📍</div>Long Island, NY</div>
+          <div class="contact-line"><div class="contact-line-icon">🗺️</div>Serving NY &amp; NJ &nbsp;<span style="font-size:12px;color:#4CAF50;">(CT Coming Soon)</span></div>
+        </div>
+        <div class="contact-block">
+          <div class="contact-block-title">Multiple Locations?</div>
+          <div style="font-size:14px;color:#888;line-height:1.7;">Operating several sites? Select "6+ Locations" in the form. We specialize in coordinating vending solutions across multiple locations under a single agreement — one call, one team, consistent service everywhere.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-top">
+      <div><div class="footer-brand-name">TAP <span>&</span> TAKE LLC</div><div class="footer-tagline">Long Island, NY's local vending operator.</div></div>
+      <div><div class="footer-col-title">Navigate</div><a class="footer-link" onclick="showPage('home')">Home</a><a class="footer-link" onclick="showPage('services')">Services</a><a class="footer-link" onclick="showPage('about')">About</a></div>
+      <div><div class="footer-col-title">Company</div><a class="footer-link" onclick="showPage('faq')">FAQ</a><a class="footer-link" onclick="showPage('contact')">Contact</a></div>
+      <div><div class="footer-col-title">Contact</div><div class="footer-link">Long Island, NY</div><div class="footer-link">info@tapandtakellc.com</div></div>
+    </div>
+    <div class="footer-bottom"><div>© 2025 Tap & Take LLC. All rights reserved.</div><div class="footer-green">Long Island, New York</div></div>
+  </footer>
+</div>
+<script>
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  const el=document.getElementById('nav-'+name);
+  if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+}
+function toggleFaq(el){
+  const item=el.parentElement;
+  const ans=item.querySelector('.faq-a');
+  const open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').classList.remove('open');});
+  if(!open){item.classList.add('open');ans.classList.add('open');}
+}
+function submitForm(){
+  document.getElementById('formContent').style.display='none';
+  document.getElementById('formSuccess').classList.add('show');
+}
+</script>
+</body>
+</html>
