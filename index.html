@@ -732,19 +732,21 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
     <div class="contact-grid">
       <div class="contact-form" id="contactFormWrap">
         <div class="form-title">Tell Us About Your Location</div>
-        <div id="formContent">
+        <form id="formContent" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return submitForm(event)">
+          <input type="hidden" name="form-name" value="contact">
+          <p style="display:none"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
           <div class="form-row">
-            <div class="form-group"><label>Business Name</label><input type="text" placeholder="Company Name"></div>
-            <div class="form-group"><label>Your Name</label><input type="text" placeholder="Jane Smith"></div>
+            <div class="form-group"><label>Business Name</label><input type="text" name="business_name" required placeholder="Company Name"></div>
+            <div class="form-group"><label>Your Name</label><input type="text" name="your_name" required placeholder="Jane Smith"></div>
           </div>
           <div class="form-row">
-            <div class="form-group"><label>Your Role / Title</label><input type="text" placeholder="Facilities Manager"></div>
-            <div class="form-group"><label>Email Address</label><input type="email" placeholder="jane@company.com"></div>
+            <div class="form-group"><label>Your Role / Title</label><input type="text" name="role_title" placeholder="Facilities Manager"></div>
+            <div class="form-group"><label>Email Address</label><input type="email" name="email" required placeholder="jane@company.com"></div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Location Type</label>
-              <select>
+              <select name="location_type">
                 <option value="">Select your space...</option>
                 <option>Office / Corporate</option>
                 <option>Retail Store</option>
@@ -757,7 +759,7 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
             </div>
             <div class="form-group">
               <label>Number of Locations</label>
-              <select>
+              <select name="number_of_locations">
                 <option value="">How many sites?</option>
                 <option>1 Location</option>
                 <option>2–5 Locations</option>
@@ -766,9 +768,9 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
               </select>
             </div>
           </div>
-          <div class="form-group"><label>Tell Us About Your Space</label><textarea placeholder="Approximate size, daily foot traffic, any specific needs or questions..."></textarea></div>
-          <button class="form-submit" onclick="submitForm()">Request Free Assessment →</button>
-        </div>
+          <div class="form-group"><label>Tell Us About Your Space</label><textarea name="message" placeholder="Approximate size, daily foot traffic, any specific needs or questions..."></textarea></div>
+          <button type="submit" class="form-submit">Request Free Assessment →</button>
+        </form>
         <div class="form-success" id="formSuccess">
           <div class="form-success-icon">✅</div>
           <div class="form-success-title">We Got It — Thank You!</div>
@@ -822,9 +824,23 @@ function toggleFaq(el){
   document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').classList.remove('open');});
   if(!open){item.classList.add('open');ans.classList.add('open');}
 }
-function submitForm(){
-  document.getElementById('formContent').style.display='none';
-  document.getElementById('formSuccess').classList.add('show');
+function submitForm(e){
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(data).toString()
+  })
+  .then(()=>{
+    document.getElementById('formContent').style.display='none';
+    document.getElementById('formSuccess').classList.add('show');
+  })
+  .catch(()=>{
+    alert("Sorry, there was an error sending your message. Please email info@tapandtakellc.com directly.");
+  });
+  return false;
 }
 </script>
 </body>
