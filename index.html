@@ -37,6 +37,8 @@ nav{
 .nav-links li a:hover,.nav-links li a.active{color:var(--white);background:var(--dark3);}
 .nav-cta{background:var(--green)!important;color:#000!important;padding:9px 20px!important;border-radius:6px!important;}
 .nav-cta:hover{background:var(--green-light)!important;}
+.menu-toggle{display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:8px;line-height:0;}
+.menu-toggle svg{width:26px;height:26px;stroke:var(--white);}
 /* ── HERO ── */
 .hero{
   min-height:100vh;padding:70px 0 0;
@@ -232,7 +234,18 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
 /* ── MOBILE ── */
 @media(max-width:900px){
   nav{padding:0 20px;}
-  .nav-links{display:none;}
+  .menu-toggle{display:inline-flex;align-items:center;justify-content:center;}
+  .nav-links{
+    display:none;flex-direction:column;align-items:stretch;
+    position:absolute;top:70px;left:0;right:0;
+    background:rgba(10,10,10,0.98);backdrop-filter:blur(14px);
+    padding:14px 16px;gap:4px;
+    border-bottom:1px solid #1c1c1c;
+  }
+  .nav-links.open{display:flex;}
+  .nav-links li{list-style:none;}
+  .nav-links li a{display:block;padding:14px 16px;font-size:14px;border-radius:6px;}
+  .nav-cta{margin-top:6px;text-align:center;}
   .hero-content{flex-direction:column;padding:40px 24px;}
   .hero-right{display:none;}
   .section{padding:60px 24px;}
@@ -298,7 +311,10 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
       <text x="102" y="134" font-family="Verdana,sans-serif" font-size="10" font-weight="700" fill="#aaa" letter-spacing="6">LLC</text>
     </svg>
   </a>
-  <ul class="nav-links">
+  <button class="menu-toggle" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <ul class="nav-links" id="navLinks">
     <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
     <li><a onclick="showPage('services')" id="nav-services">Services</a></li>
     <li><a onclick="showPage('about')" id="nav-about">About</a></li>
@@ -816,6 +832,12 @@ function showPage(name){
   const el=document.getElementById('nav-'+name);
   if(el)el.classList.add('active');
   window.scrollTo(0,0);
+  const nav=document.getElementById('navLinks');
+  if(nav)nav.classList.remove('open');
+}
+function toggleMobileMenu(){
+  const nav=document.getElementById('navLinks');
+  if(nav)nav.classList.toggle('open');
 }
 function toggleFaq(el){
   const item=el.parentElement;
