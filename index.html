@@ -748,9 +748,10 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
     <div class="contact-grid">
       <div class="contact-form" id="contactFormWrap">
         <div class="form-title">Tell Us About Your Location</div>
-        <form id="formContent" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return submitForm(event)">
-          <input type="hidden" name="form-name" value="contact">
-          <p style="display:none"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+        <form id="formContent" name="contact" method="POST" onsubmit="return submitForm(event)">
+          <input type="hidden" name="_subject" value="New Machine Request — Tap & Take LLC">
+          <input type="hidden" name="_captcha" value="false">
+          <p style="display:none"><label>Don't fill this out if you're human: <input name="_honey"></label></p>
           <div class="form-row">
             <div class="form-group"><label>Business Name</label><input type="text" name="business_name" required placeholder="Company Name"></div>
             <div class="form-group"><label>Your Name</label><input type="text" name="your_name" required placeholder="Jane Smith"></div>
@@ -850,14 +851,19 @@ function submitForm(e){
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
-  fetch('/', {
+  fetch('https://formsubmit.co/ajax/info@tapandtakellc.com', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(data).toString()
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(Object.fromEntries(data))
   })
-  .then(()=>{
-    document.getElementById('formContent').style.display='none';
-    document.getElementById('formSuccess').classList.add('show');
+  .then(res => res.json())
+  .then(data => {
+    if(data.success === 'true' || data.success === true){
+      document.getElementById('formContent').style.display='none';
+      document.getElementById('formSuccess').classList.add('show');
+    } else {
+      alert("Sorry, there was an error sending your message. Please email info@tapandtakellc.com directly.");
+    }
   })
   .catch(()=>{
     alert("Sorry, there was an error sending your message. Please email info@tapandtakellc.com directly.");
