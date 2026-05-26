@@ -748,13 +748,9 @@ footer{background:#080808;border-top:1px solid #1a1a1a;padding:50px 80px 30px;}
     <div class="contact-grid">
       <div class="contact-form" id="contactFormWrap">
         <div class="form-title">Tell Us About Your Location</div>
-        <form id="formContent" name="contact" action="https://formsubmit.co/info@tapandtakellc.com" method="POST" onsubmit="return submitForm(event)">
-          <input type="hidden" name="_subject" value="New Tap & Take inquiry">
-          <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="text" name="_honey" style="display:none">
-          <input type="hidden" name="_next" value="https://tapandtakellc.com/">
-          <input type="hidden" name="form-source" value="tapandtakellc.com — Get a Machine form">
+        <form id="formContent" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="return submitForm(event)">
+          <input type="hidden" name="form-name" value="contact">
+          <p style="display:none"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
           <div class="form-row">
             <div class="form-group"><label>Business Name</label><input type="text" name="business_name" required placeholder="Company Name"></div>
             <div class="form-group"><label>Your Name</label><input type="text" name="your_name" required placeholder="Jane Smith"></div>
@@ -856,12 +852,11 @@ function submitForm(e){
   const btn = form.querySelector('.form-submit');
   const data = new FormData(form);
   if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
-  fetch('https://formsubmit.co/ajax/info@tapandtakellc.com', {
+  fetch('/', {
     method: 'POST',
-    headers: { 'Accept': 'application/json' },
-    body: data
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(data).toString()
   })
-  .then(r => r.json())
   .then(()=>{
     document.getElementById('formContent').style.display='none';
     document.getElementById('formSuccess').classList.add('show');
