@@ -1,9 +1,29 @@
 [build]
   publish = "."
 
+# Security headers applied to every response.
+# Defense-in-depth for a static marketing site.
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "SAMEORIGIN"
+    # Prevent rendering inside iframes on other origins (clickjacking).
+    X-Frame-Options = "DENY"
+    # Prevent MIME-type sniffing.
     X-Content-Type-Options = "nosniff"
+    # Don't leak full URL to other origins.
     Referrer-Policy = "strict-origin-when-cross-origin"
+    # Force HTTPS for 1 year (with subdomains + preload-list eligible).
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    # Disable powerful features we never use.
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), accelerometer=(), gyroscope=()"
+    # Restrict where assets can load from. Allows Google Fonts (already used),
+    # inline scripts/styles (the site is inline), and Netlify Forms submission.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+    # Older browsers' XSS filter (modern browsers ignore it but harmless).
+    X-XSS-Protection = "1; mode=block"
+
+# Long-cache static assets (logo and similar).
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

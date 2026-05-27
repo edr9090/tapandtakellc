@@ -1,0 +1,26 @@
+# Tap and Take LLC — public marketing site
+# Allow legitimate search crawlers; everything is intentionally public.
+
+User-agent: *
+Allow: /
+
+# Block known aggressive AI training crawlers (opt-out).
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+Sitemap: https://tapandtakellc.com/sitemap.xml
